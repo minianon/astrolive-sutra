@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-night text-chalk font-sans antialiased;
+    background-image:
+      radial-gradient(900px 600px at 12% -8%, rgba(124,107,255,0.20), transparent 60%),
+      radial-gradient(700px 500px at 96% 4%, rgba(245,165,36,0.13), transparent 55%),
+      radial-gradient(600px 700px at 50% 104%, rgba(232,93,154,0.10), transparent 60%);
+    background-attachment: fixed;
+  }
+  * { -webkit-tap-highlight-color: transparent; }
+  ::selection { background: rgba(124,107,255,0.45); }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-edge bg-veil/70 shadow-card backdrop-blur-xl;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+           transition active:scale-[0.98] disabled:opacity-40 disabled:active:scale-100;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-b from-indigo-glow to-indigo-deep text-white shadow-glow;
+  }
+  .btn-gold {
+    @apply btn bg-gradient-to-b from-marigold to-saffron text-night;
+  }
+  .btn-ghost {
+    @apply btn border border-edge bg-white/[0.03] text-chalk hover:bg-white/[0.06];
+  }
+  .field {
+    @apply w-full rounded-xl border border-edge bg-black/30 px-3.5 py-3 text-[15px] text-chalk
+           placeholder:text-mute/60 outline-none focus:border-indigo-glow/70 focus:ring-2 focus:ring-indigo-glow/20;
+  }
+  .label { @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-mute; }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-edge bg-white/[0.04]
+           px-2.5 py-1 text-[11px] font-medium text-mute;
+  }
+  .hr { @apply h-px w-full bg-gradient-to-r from-transparent via-edge to-transparent; }
+  .num { font-variant-numeric: tabular-nums; }
+}
+
+/* hide scrollbars inside the phone frame */
+.no-bar::-webkit-scrollbar { width: 0; height: 0; }
+.no-bar { scrollbar-width: none; }
+
+@keyframes riseIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.rise { animation: riseIn .38s cubic-bezier(.22,.9,.3,1) both; }
+@keyframes pulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(124,107,255,.5); }
+  100% { box-shadow: 0 0 0 14px rgba(124,107,255,0); }
+}
+.pulse-ring { animation: pulseRing 1.8s ease-out infinite; }
