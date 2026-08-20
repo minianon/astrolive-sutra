@@ -10,8 +10,23 @@ import { Bars, Console, Note, Stat } from '../ui/kit'
  * claiming runaway virality would be the fastest way to lose credibility with
  * judges who run this business. Sub-1 K does not compound to infinity — it acts
  * as a permanent multiplier on paid acquisition, which is exactly the lever a
- * company with no institutional funding needs. Every input is editable so a
- * sceptical reader can drive the assumptions down and see what survives.
+ * company with no institutional funding needs.
+ *
+ * ON THE RETENTION MATH — worth reading before trusting the numbers.
+ * "25–30% repeat users" and "average transaction value ₹230" and "LTV ≈ ₹1,500"
+ * are three separately-sourced figures, and they only reconcile one way. ₹1,500
+ * of LTV at ₹230 per transaction implies ~6.5 transactions per acquired user,
+ * while only ~27% of users ever come back. So the repeaters must be carrying
+ * almost everything — which is exactly what the reported "80% of revenue comes
+ * from repeat users" says independently.
+ *
+ * We therefore model LTV as: 1 transaction from everybody, plus a long tail from
+ * the minority who return. `extraPerRepeater` is *derived* from the cited LTV
+ * rather than invented, so the baseline always agrees with the published figure,
+ * and improving the repeat share moves LTV through a channel the sources support.
+ * Treating the repeat rate as a per-transaction repurchase probability instead
+ * would imply an LTV of ~₹315 and an LTV:CAC below 1 — i.e. that the category
+ * leader is deeply lossmaking, which its ₹250 Cr FY25 profit contradicts.
  */
 
 interface Inputs {
@@ -22,6 +37,7 @@ interface Inputs {
   acceptRate: number
   cac: number
   atv: number
+  ltvNow: number
   repeatNow: number
   repeatHabit: number
 }
@@ -34,6 +50,7 @@ const DEFAULTS: Inputs = {
   acceptRate: 0.45,
   cac: 750,
   atv: 230,
+  ltvNow: 1500,
   repeatNow: 0.27,
   repeatHabit: 0.44,
 }
@@ -46,31 +63,43 @@ const FIELDS: { key: keyof Inputs; label: string; min: number; max: number; step
   { key: 'acceptRate', label: 'Invite acceptance rate', min: 0.05, max: 0.9, step: 0.01, pct: true, hint: 'A personal message from a partner or parent, not a marketing push.' },
   { key: 'cac', label: 'Paid CAC (₹)', min: 200, max: 1500, step: 25, hint: 'Category benchmark is ₹600–900.' },
   { key: 'atv', label: 'Average transaction value (₹)', min: 80, max: 600, step: 10, hint: 'Astrotalk reports ≈₹230.' },
-  { key: 'repeatNow', label: 'Repeat rate today', min: 0.05, max: 0.6, step: 0.01, pct: true, hint: 'Category leader sits at 25–30%.' },
-  { key: 'repeatHabit', label: 'Repeat rate with the habit loop', min: 0.1, max: 0.8, step: 0.01, pct: true, hint: 'Duolingo cut churn from 47% to 28% with streaks; this assumes a smaller gain.' },
+  { key: 'ltvNow', label: 'Category LTV today (₹)', min: 400, max: 3000, step: 50, hint: 'Cited baseline ≈₹1,500. Everything downstream is derived from this, not assumed.' },
+  { key: 'repeatNow', label: 'Share of users who ever repeat', min: 0.05, max: 0.6, step: 0.01, pct: true, hint: 'Category leader sits at 25–30%.' },
+  { key: 'repeatHabit', label: 'Same share, with the habit loop', min: 0.1, max: 0.8, step: 0.01, pct: true, hint: 'Duolingo cut churn from 47% to 28% with streaks; this assumes a smaller gain.' },
 ]
 
 export default function Growth() {
   const [inp, setInp] = useState<Inputs>(DEFAULTS)
 
   const m = useMemo(() => {
+    /* --- acquisition loop --- */
     const k = inp.relationalShare * inp.invitesPerAsker * inp.sendRate * inp.acceptRate
     const amplification = k < 1 ? 1 / (1 - k) : Infinity
     const organic = Math.round(inp.paidNew * k)
     const totalNew = inp.paidNew + organic
     const blendedCac = Math.round((inp.paidNew * inp.cac) / Math.max(totalNew, 1))
-    const cacSaved = Math.round((inp.cac - blendedCac) * totalNew)
 
-    const txNow = 1 / (1 - inp.repeatNow)
-    const txHabit = 1 / (1 - inp.repeatHabit)
-    const ltvLift = txHabit / txNow - 1
+    /* --- retention, reconciled against the cited LTV --- */
+    const txnsNow = inp.ltvNow / inp.atv
+    // derived, not invented: how much tail a returning user actually carries
+    const extraPerRepeater = Math.max((txnsNow - 1) / Math.max(inp.repeatNow, 0.01), 0)
+    const txnsNew = 1 + inp.repeatHabit * extraPerRepeater
+    const ltvNew = inp.atv * txnsNew
+    const ltvLift = ltvNew / inp.ltvNow - 1
 
-    const ltvNow = inp.atv * txNow
-    const ltvNew = inp.atv * txHabit
-    const ratioNow = ltvNow / inp.cac
+    const ratioNow = inp.ltvNow / inp.cac
     const ratioNew = ltvNew / blendedCac
 
-    return { k, amplification, organic, totalNew, blendedCac, cacSaved, txNow, txHabit, ltvLift, ltvNow, ltvNew, ratioNow, ratioNew }
+    /* --- the 10-lakh question --- */
+    const gap = 900000
+    const costPaidOnly = (gap * inp.cac) / 1e7
+    const costBlended = (gap * blendedCac) / 1e7
+
+    return {
+      k, amplification, organic, totalNew, blendedCac,
+      txnsNow, extraPerRepeater, txnsNew, ltvNew, ltvLift, ratioNow, ratioNew,
+      costPaidOnly, costBlended,
+    }
   }, [inp])
 
   const funnel = [
@@ -91,7 +120,9 @@ export default function Growth() {
           tone={m.k >= 0.2 ? 'good' : 'default'} />
         <Stat label="Organic users / month" value={m.organic.toLocaleString('en-IN')} sub="acquired at ≈₹0 marginal cost" tone="good" />
         <Stat label="Blended CAC" value={`₹${m.blendedCac}`} sub={`down from ₹${inp.cac}`} tone="good" />
-        <Stat label="LTV : CAC" value={`${m.ratioNew.toFixed(2)}×`} sub={`from ${m.ratioNow.toFixed(2)}× today`} tone={m.ratioNew >= 3 ? 'good' : 'warn'} />
+        <Stat label="LTV : CAC" value={`${m.ratioNew.toFixed(2)}×`}
+          sub={`from ${m.ratioNow.toFixed(2)}× today`}
+          tone={m.ratioNew >= 3 ? 'good' : 'warn'} />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
@@ -154,18 +185,11 @@ export default function Growth() {
               <span className="text-chalk">₹54–81 crore</span> of pure acquisition spend. Astrotalk
               funds ₹236–296 crore of annual marketing out of ₹1,214 crore of revenue; AstroLive has
               raised no disclosed institutional funding. At the blended CAC above, the same 900,000
-              users cost{' '}
-              <span className="num text-chalk">
-                ₹{Math.round((900000 * m.blendedCac) / 1e7)} crore
-              </span>{' '}
-              instead of{' '}
-              <span className="num text-chalk">₹{Math.round((900000 * inp.cac) / 1e7)} crore</span> —
+              users cost <span className="num text-chalk">₹{m.costBlended.toFixed(0)} crore</span>{' '}
+              instead of <span className="num text-chalk">₹{m.costPaidOnly.toFixed(0)} crore</span> —
               a saving of{' '}
-              <span className="num text-marigold">
-                ₹{Math.round((900000 * (inp.cac - m.blendedCac)) / 1e7)} crore
-              </span>
-              . That gap is the difference between a plan that needs a funding round and one that
-              does not.
+              <span className="num text-marigold">₹{(m.costPaidOnly - m.costBlended).toFixed(0)} crore</span>.
+              That gap is the difference between a plan that needs a funding round and one that does not.
             </p>
           </div>
 
@@ -174,16 +198,28 @@ export default function Growth() {
               Retention is the larger prize
             </h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
-              <Stat label="Txns / user today" value={m.txNow.toFixed(2)} sub={`at ${Math.round(inp.repeatNow * 100)}% repeat`} />
-              <Stat label="With habit loop" value={m.txHabit.toFixed(2)} sub={`at ${Math.round(inp.repeatHabit * 100)}% repeat`} tone="good" />
-              <Stat label="LTV lift" value={`+${Math.round(m.ltvLift * 100)}%`} sub="relative, independent of absolute ARPU" tone="good" />
+              <Stat label="LTV today" value={`₹${Math.round(inp.ltvNow).toLocaleString('en-IN')}`} sub={`${m.txnsNow.toFixed(1)} txns / user`} />
+              <Stat label="LTV with habit loop" value={`₹${Math.round(m.ltvNew).toLocaleString('en-IN')}`} sub={`${m.txnsNew.toFixed(1)} txns / user`} tone="good" />
+              <Stat label="LTV lift" value={`+${Math.round(m.ltvLift * 100)}%`} sub="from repeat share alone" tone="good" />
             </div>
             <p className="mt-4 text-[12.5px] leading-relaxed text-mute">
-              The category leader's repeat rate is 25–30%, which means roughly{' '}
-              <span className="text-chalk">70–75% of paying users transact once and never
-              return</span> — in the best product in the market. Nothing else in this model is worth
-              as much as moving that number, and it is the metric the daily transit card and the
-              watch-day callbacks exist to move.
+              How this is derived, so you can check it: ₹{inp.ltvNow.toLocaleString('en-IN')} of LTV at
+              ₹{inp.atv} per transaction implies{' '}
+              <span className="num text-chalk">{m.txnsNow.toFixed(1)}</span> transactions per acquired
+              user, while only <span className="num text-chalk">{Math.round(inp.repeatNow * 100)}%</span>{' '}
+              ever return. So each returning user must carry about{' '}
+              <span className="num text-chalk">{m.extraPerRepeater.toFixed(0)}</span> further
+              transactions — which is the same thing the independently-reported "80% of revenue comes
+              from repeat users" is telling us. Raising the repeat share to{' '}
+              <span className="num text-chalk">{Math.round(inp.repeatHabit * 100)}%</span> therefore
+              moves LTV to ₹{Math.round(m.ltvNew).toLocaleString('en-IN')} without assuming anyone
+              spends more per transaction.
+            </p>
+            <p className="mt-3 text-[12.5px] leading-relaxed text-mute">
+              And that is the whole opportunity: a 25–30% repeat rate means roughly{' '}
+              <span className="text-chalk">70–75% of paying users transact once and never return</span>
+              {' '}— in the best product in the market. Nothing else in this model is worth as much as
+              moving that number, and the daily card and watch-day callbacks exist for no other reason.
             </p>
           </div>
         </div>

@@ -28,7 +28,8 @@ export default function Home() {
 
   const today = TRANSITS[0]
   const upcoming = useMemo(() => TRANSITS.filter((t) => t.offset > 0).slice(0, 4), [])
-  const linkedReading = state.readings.find((r) => r.id === upcoming[0]?.fromReadingId)
+  const nextLinked = upcoming.find((t) => t.fromReadingId)
+  const linkedReading = state.readings.find((r) => r.id === nextLinked?.fromReadingId)
 
   // one check-in per calendar day; the streak is the free, zero-marginal-cost hook
   useEffect(() => { checkIn() }, [checkIn])
@@ -122,7 +123,7 @@ export default function Home() {
                   <span className="text-[11px] leading-tight">
                     <span className="text-mute">Ask </span>
                     <span className="font-semibold">{who.name.split(' ').slice(-1)}</span>
-                    <span className="text-mute"> about this — she already has the context</span>
+                    <span className="text-mute"> about this — they already have the context</span>
                   </span>
                   <span className="ml-auto text-mute">›</span>
                 </Link>
