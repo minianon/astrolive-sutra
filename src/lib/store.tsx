@@ -72,6 +72,26 @@ function save(s: Persisted) {
   }
 }
 
+/**
+ * A judge should not have to type birth details to see the product. Appending
+ * `demo=1` to any route seeds a sample profile, which is also what the
+ * screenshot tooling in the report pipeline uses.
+ */
+export const DEMO_BIRTH: Birth = {
+  name: 'Tushar Bhardwaj',
+  date: '2001-08-14',
+  time: '06:20',
+  place: 'Bengaluru',
+}
+
+function wantsDemo(): boolean {
+  try {
+    return /[?&]demo=1/.test(window.location.hash) || /[?&]demo=1/.test(window.location.search)
+  } catch {
+    return false
+  }
+}
+
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10)
 }
@@ -98,7 +118,14 @@ interface Ctx {
 const StoreContext = createContext<Ctx | null>(null)
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<Persisted>(load)
+  const [state, setState] = useState<Persisted>(() => {
+    const s = load()
+    // seed the sample profile on first paint so gated routes render immediately
+    if (s.birth || !wantsDemo()) return s
+    // backdate the last check-in by a day so the streak continues rather than resetting
+    const y = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+    return { ...s, birth: DEMO_BIRTH, streak: 12, lastCheckIn: y, asyncCredits: 4, planId: 'p1' }
+  })
 
   useEffect(() => { save(state) }, [state])
 

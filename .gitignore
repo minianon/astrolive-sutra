@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# local screenshot tooling
+.chrome-prof/
+.chrome-prof2/
+.chrome-fresh/

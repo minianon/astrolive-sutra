@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useStore } from '../lib/store'
+import { DEMO_BIRTH, useStore } from '../lib/store'
 import { computeChart, sunSign, type Birth } from '../lib/chart'
 import { Note } from '../ui/kit'
 
@@ -83,6 +83,15 @@ export default function Onboard() {
           <button className="btn-gold mt-5 w-full" disabled={!valid} onClick={submit}>
             {next ? 'Unlock the reading' : 'Build my chart'}
           </button>
+
+          {!next && (
+            <button
+              className="btn-ghost mt-2 w-full !text-[12px]"
+              onClick={() => setForm(DEMO_BIRTH)}
+            >
+              Fill a sample profile instead
+            </button>
+          )}
 
           <Note>
             Your details stay in this browser. Nothing is uploaded — this prototype has no
