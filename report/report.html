@@ -1,0 +1,1380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AstroLive Sutra — AstroHack 2026 — Team Mini Anon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  @page { size: A4; margin: 17mm 15mm 15mm 15mm; }
+
+  :root {
+    --ink: #16151c;
+    --body: #2b2a33;
+    --mute: #63616e;
+    --line: #ddd9d0;
+    --rule: #c9c3b6;
+    --gold: #9a6a12;
+    --plum: #4b3bab;
+    --rose: #a52d68;
+    --jade: #14705a;
+    --wash: #faf8f4;
+    --band: #f2eee6;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.55;
+    color: var(--body);
+    background: #fff;
+  }
+
+  h1, h2, h3, h4 { font-family: "Source Serif 4", Georgia, serif; color: var(--ink); margin: 0; }
+  h2 { font-size: 17pt; line-height: 1.15; letter-spacing: -0.01em; }
+  h3 { font-size: 11.5pt; margin-top: 14pt; margin-bottom: 3pt; }
+  h4 { font-size: 10pt; margin-top: 10pt; margin-bottom: 2pt; }
+  p { margin: 0 0 7pt; }
+  strong { color: var(--ink); font-weight: 600; }
+  em { font-style: italic; }
+  a { color: var(--plum); text-decoration: none; word-break: break-word; }
+  sup { font-size: 7pt; color: var(--plum); font-weight: 600; }
+
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .nobreak { page-break-inside: avoid; }
+
+  /* section headers */
+  .kicker {
+    font-size: 7.5pt; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 5pt;
+  }
+  .lede { font-size: 10.5pt; color: var(--mute); margin: 6pt 0 12pt; line-height: 1.5; }
+  .rule { height: 2px; background: var(--ink); margin: 0 0 12pt; width: 46pt; }
+
+  /* cover */
+  .cover { height: 252mm; display: flex; flex-direction: column; }
+  .cover-top { flex: 1; }
+  .mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30pt; height: 30pt; border-radius: 8pt;
+    background: linear-gradient(160deg, #ffc24b, #e08c0b); color: #fff;
+    font-size: 15pt; margin-bottom: 16pt;
+  }
+  .cover h1 { font-size: 38pt; line-height: 1.02; letter-spacing: -0.02em; }
+  .cover .sub { font-family: "Source Serif 4", serif; font-size: 15pt; color: var(--mute); font-style: italic; margin-top: 6pt; }
+  .cover .thesis {
+    margin-top: 18pt; padding: 12pt 14pt; background: var(--band);
+    border-left: 3px solid var(--gold); font-size: 10pt; line-height: 1.5;
+  }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; margin: 8pt 0 10pt; font-size: 8.6pt; }
+  th {
+    text-align: left; font-size: 7pt; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mute); font-weight: 700; border-bottom: 1.2px solid var(--ink);
+    padding: 4pt 5pt 3pt;
+  }
+  td { padding: 4.2pt 5pt; border-bottom: 0.6px solid var(--line); vertical-align: top; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.tot td { border-top: 1.2px solid var(--ink); border-bottom: none; font-weight: 600; color: var(--ink); }
+  .src { font-size: 7.4pt; color: var(--mute); }
+
+  /* layout helpers */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8pt; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7pt; }
+
+  .stat { border: 0.8px solid var(--line); border-radius: 5pt; padding: 8pt 9pt; background: var(--wash); }
+  .stat .l { font-size: 6.8pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); font-weight: 700; }
+  .stat .v { font-family: "Source Serif 4", serif; font-size: 16pt; font-weight: 700; color: var(--ink); line-height: 1.1; margin-top: 2pt; font-variant-numeric: tabular-nums; }
+  .stat .s { font-size: 7.4pt; color: var(--mute); line-height: 1.35; margin-top: 2pt; }
+
+  .box { border: 0.8px solid var(--line); border-radius: 5pt; padding: 10pt 11pt; background: var(--wash); }
+  .box.gold { border-color: #e3c68a; background: #fdf8ee; }
+  .box.plum { border-color: #cdc6f0; background: #f7f5ff; }
+  .box h4 { margin-top: 0; }
+
+  .callout {
+    border-left: 3px solid var(--gold); background: var(--band);
+    padding: 9pt 11pt; margin: 9pt 0; font-size: 9.4pt;
+  }
+  .callout.plum { border-left-color: var(--plum); background: #f6f4ff; }
+
+  ul, ol { margin: 4pt 0 8pt; padding-left: 14pt; }
+  li { margin-bottom: 3.5pt; }
+  ul.tight li { margin-bottom: 2pt; }
+
+  .pill {
+    display: inline-block; font-size: 6.8pt; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 1.5pt 5pt; border-radius: 20pt;
+    border: 0.8px solid var(--rule); color: var(--mute);
+  }
+  .pill.rev { border-color: #9fd0c2; color: var(--jade); background: #eff9f6; }
+  .pill.co  { border-color: #c3bbee; color: var(--plum); background: #f5f3ff; }
+  .pill.tp  { border-color: var(--rule); color: var(--mute); }
+
+  /* screenshots */
+  figure { margin: 0; }
+  figure img { width: 100%; display: block; border: 0.8px solid var(--line); border-radius: 5pt; background: #0b0a14; }
+  figcaption { font-size: 7.6pt; color: var(--mute); line-height: 1.4; margin-top: 4pt; }
+  figcaption b { color: var(--ink); }
+  .shot-tall img { max-height: 82mm; width: auto; margin: 0 auto; }
+  .shot-wide img { max-height: 110mm; width: auto; margin: 0 auto; }
+
+  /* formula */
+  .formula {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 8.4pt; background: #f4f2ec; border: 0.6px solid var(--line);
+    border-radius: 4pt; padding: 7pt 9pt; margin: 6pt 0 8pt; color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* footer note */
+  .foot { font-size: 7.6pt; color: var(--mute); border-top: 0.6px solid var(--line); padding-top: 5pt; margin-top: 10pt; }
+  .refs { font-size: 8pt; }
+  .refs li { margin-bottom: 4pt; }
+  .toc { font-size: 9pt; }
+  .toc td { border-bottom: 0.6px dotted var(--line); padding: 3.4pt 0; }
+  .toc td.n { color: var(--mute); }
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="page cover">
+  <div class="cover-top">
+    <div class="mark">&#10022;</div>
+    <div class="kicker">AstroHack 2026 &middot; Build the Next Universe</div>
+    <h1>AstroLive<br />Sutra</h1>
+    <div class="sub">The thread that connects.</div>
+
+    <div class="thesis">
+      <strong>The argument in three sentences.</strong> AstroLive has no disclosed institutional
+      funding and 1,500 astrologers; reaching its stated target of 10 lakh paid users would cost
+      ₹54–81 crore at the category's ₹600–900 CAC, against an incumbent that funds ₹236–296 crore of
+      marketing a year and draws 77% of its traffic from an SEO moat built over years. So AstroLive
+      cannot out-spend Astrotalk and cannot out-SEO it — and with roughly 67 paid users per
+      astrologer against Astrotalk's 37, its binding constraint is not even demand but supply.
+      What remains is growth built structurally into the product mechanic, and capacity created by
+      making existing astrologers faster rather than by recruiting 13,500 more.
+    </div>
+
+    <div class="grid2" style="margin-top:16pt">
+      <div>
+        <table style="margin:0">
+          <tr><td style="border:none;padding-left:0"><strong>Team</strong></td><td style="border:none">Mini Anon</td></tr>
+          <tr><td style="border:none;padding-left:0"><strong>Team leader</strong></td><td style="border:none">Tushar Bhardwaj</td></tr>
+          <tr><td style="border:none;padding-left:0"><strong>Member</strong></td><td style="border:none">Aindrela Saha</td></tr>
+          <tr><td style="border:none;padding-left:0"><strong>Submitted</strong></td><td style="border:none">20 August 2026</td></tr>
+        </table>
+      </div>
+      <div class="box">
+        <h4>Live prototype</h4>
+        <p style="margin:0;font-size:8.6pt">
+          A working web application, publicly accessible, no login required.<br />
+          <a href="https://github.com/">github.com &rarr; astrolive-sutra</a><br />
+          <span class="src">The invite mechanic works across separate browsers with no shared
+          backend — open it in a private window to verify.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h4 style="margin-bottom:4pt">Contents</h4>
+    <table class="toc">
+      <tr><td>1 &nbsp; Executive summary</td><td class="n">3</td><td>&nbsp;&nbsp;&nbsp;9 &nbsp; Growth model</td><td class="n">11</td></tr>
+      <tr><td>2 &nbsp; Teardown: AstroLive as it stands</td><td class="n">4</td><td>&nbsp;&nbsp;&nbsp;10 &nbsp; Revenue model</td><td class="n">12</td></tr>
+      <tr><td>3 &nbsp; Competitive benchmark</td><td class="n">5</td><td>&nbsp;&nbsp;&nbsp;11 &nbsp; Expected impact</td><td class="n">13</td></tr>
+      <tr><td>4 &nbsp; Four structural gaps</td><td class="n">6</td><td>&nbsp;&nbsp;&nbsp;12 &nbsp; Success metrics</td><td class="n">14</td></tr>
+      <tr><td>5 &nbsp; Why the obvious answers fail</td><td class="n">7</td><td>&nbsp;&nbsp;&nbsp;13 &nbsp; Scalability &amp; rollout</td><td class="n">15</td></tr>
+      <tr><td>6 &nbsp; The solution: four modules</td><td class="n">8</td><td>&nbsp;&nbsp;&nbsp;14 &nbsp; Risks</td><td class="n">16</td></tr>
+      <tr><td>7 &nbsp; The AI architecture</td><td class="n">9</td><td>&nbsp;&nbsp;&nbsp;15 &nbsp; Limitations &amp; disclosures</td><td class="n">17</td></tr>
+      <tr><td>8 &nbsp; Prototype walkthrough</td><td class="n">10</td><td>&nbsp;&nbsp;&nbsp;16 &nbsp; References &amp; AI-tool citation</td><td class="n">18</td></tr>
+    </table>
+    <div class="foot">
+      All external sources and AI tools used to build both the prototype and this report are cited
+      in §16. Competitor figures drawn from third-party analysis rather than company disclosure are
+      labelled as such throughout.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 1. EXEC SUMMARY ============================ -->
+<section class="page">
+  <div class="kicker">Section 1</div>
+  <h2>Executive summary</h2>
+  <div class="rule"></div>
+
+  <p class="lede">
+    AstroLive is a fast-growing consultation marketplace with a structural problem it cannot solve
+    with money. This submission identifies that problem precisely, then builds the one class of
+    solution that fits its actual constraints.
+  </p>
+
+  <h3>What the numbers say</h3>
+  <p>
+    AstroLive commenced operations in September 2024 and reports 100,000+ paid users across 1,500
+    astrologers, targeting 10 lakh paid users.<sup>1</sup> It has raised no disclosed institutional
+    funding.<sup>2</sup> Astrotalk, the category leader, posted ₹1,214 crore of FY25 revenue at 85%
+    year-on-year growth with roughly ₹250 crore of profit, serving 1.5 million monthly transacting
+    users across 41,000+ astrologers.<sup>3</sup>
+  </p>
+
+  <div class="grid3" style="margin:10pt 0">
+    <div class="stat"><div class="l">Acquisition gap</div><div class="v">₹54–81 Cr</div><div class="s">cost of 900,000 net new paid users at category CAC</div></div>
+    <div class="stat"><div class="l">Incumbent's ad budget</div><div class="v">₹236–296 Cr</div><div class="s">Astrotalk annual marketing, 20–25% of revenue</div></div>
+    <div class="stat"><div class="l">Users per astrologer</div><div class="v">67 vs 37</div><div class="s">AstroLive load against Astrotalk's</div></div>
+  </div>
+
+  <h3>Three conclusions that follow</h3>
+  <ol>
+    <li><strong>Paid acquisition does not close.</strong> A 10× increase in paid users at ₹600–900
+      each is a ₹54–81 crore commitment. There is no disclosed funding to draw it from, and the
+      incumbent can outspend any bid.</li>
+    <li><strong>SEO does not close either.</strong> 77% of Astrotalk's traffic is organic, off a
+      content system built over years — its Love Calculator alone draws 381,000 visits a
+      month.<sup>4</sup> Search authority compounds with time, and a September-2024 entrant cannot
+      buy past it quickly.</li>
+    <li><strong>Supply, not demand, is the constraint.</strong> Serving 10 lakh users at even
+      AstroLive's current stretched ratio needs ~15,000 astrologers. Recruiting 13,500 practitioners
+      is slower than acquiring users will ever be.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>Therefore the strategy is forced, not chosen.</strong> Growth must be structural — built
+    into the product mechanic at ~₹0 marginal cost per acquired user — and capacity must come from
+    AI leverage on the existing roster rather than recruitment. This is also a strategy AstroLive is
+    unusually well placed to run: its parent, Tech4Billion Media, built Chingari, a viral social
+    product.<sup>1</sup> The social-graph capability is already in-house. And it is a strategy
+    Astrotalk is poorly placed to copy, because its entire funnel assumes an anonymous solo user
+    arriving from a Google search.
+  </div>
+
+  <h3>And the largest prize is retention</h3>
+  <p>
+    Astrotalk's repeat rate is estimated at 25–30%.<sup>5</sup> In the best product in the market,
+    roughly <strong>70–75% of paying users transact once and never return</strong>. No other number
+    in this report is worth as much as that one, because it is unclaimed by anybody.
+  </p>
+
+  <h3>What we built</h3>
+  <p>
+    <strong>AstroLive Sutra</strong> — one product, four interlocking modules. <em>Sutra Invite</em>
+    makes every relationship question an acquisition event, because a two-person reading cannot be
+    completed alone. A <em>transit feed</em> converts astrologers' own past claims into dated
+    watch-days, giving users a reason to open the app on a day when nothing is wrong. An <em>AI
+    copilot with async answer packs</em> raises throughput per astrologer and unlocks fixed-price
+    revenue that does not depend on a running meter. And <em>Sutra Memory</em> keeps every reading
+    searchable across astrologers, turning a disposable transaction into a compounding switching cost.
+  </p>
+  <p>
+    The AI position is deliberate and narrow: <strong>AI expands astrologer capacity; it never
+    replaces astrologer accountability.</strong> A paid AI oracle is both already commoditised and
+    directly cannibalistic to the marketplace — §7 sets out why we refused to build one.
+  </p>
+</section>
+
+<!-- ============================ 2. TEARDOWN ============================ -->
+<section class="page">
+  <div class="kicker">Section 2</div>
+  <h2>Teardown: AstroLive as it stands</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    What the product does today, how it earns, and where value leaks. Assessed from the public
+    web and app-store surfaces in August 2026.
+  </p>
+
+  <h3>2.1 &nbsp;Company and scale</h3>
+  <table>
+    <tr><th>Attribute</th><th>Position</th><th>Basis</th></tr>
+    <tr><td>Operations commenced</td><td>September 2024</td><td><span class="pill co">company-reported</span></td></tr>
+    <tr><td>Paid users</td><td>100,000+ (1 lakh)</td><td><span class="pill co">company-reported</span></td></tr>
+    <tr><td>Astrologers onboarded</td><td>1,500</td><td><span class="pill co">company-reported</span></td></tr>
+    <tr><td>Stated target</td><td>10 lakh paid users</td><td><span class="pill co">company-reported</span></td></tr>
+    <tr><td>Parent</td><td>Tech4Billion Media — also Chingari's parent; founder Sumit Ghosh</td><td><span class="pill co">company-reported</span></td></tr>
+    <tr><td>Funding raised</td><td>None disclosed</td><td><span class="pill tp">third-party</span></td></tr>
+    <tr><td>App-store signal</td><td>~25k downloads, 3.9 / 5</td><td><span class="pill tp">third-party</span></td></tr>
+    <tr><td>Stated roadmap</td><td>Premium subscription tiers; pooja and product commissions; regional and international expansion</td><td><span class="pill co">company-reported</span></td></tr>
+  </table>
+
+  <h3>2.2 &nbsp;Product surface inventory</h3>
+  <div class="grid2">
+    <div class="box">
+      <h4>Monetised</h4>
+      <ul class="tight">
+        <li>Chat with astrologer — <strong>from ₹10/min</strong></li>
+        <li>Voice / video call — <strong>from ₹15/min</strong></li>
+        <li>Live group sessions</li>
+        <li>Personalised voice messages from astrologers</li>
+        <li>Pooja booking (commission)</li>
+        <li>Astrology reports — Kaalsarp, Mangal Dosha, Sade Sati</li>
+        <li>Product shop (commission)</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h4>Free — acquisition surface</h4>
+      <ul class="tight">
+        <li>Daily horoscope</li>
+        <li>Free Kundli</li>
+        <li>Kundli matching</li>
+        <li>Love calculator</li>
+        <li>Today's Panchang</li>
+        <li>Blog / editorial</li>
+        <li>First consultation free</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout plum">
+    <strong>One asset is already in place and under-exploited.</strong> AstroLive already ships
+    <em>personalised voice messages</em> from astrologers. That is an asynchronous delivery
+    primitive — the hardest part of the revenue architecture in §6.3 — sitting in the product
+    without an economic model around it. We are not proposing to build it. We are proposing to make
+    it cheap enough to sell at a fixed price.
+  </div>
+
+  <h3>2.3 &nbsp;The business model, stated plainly</h3>
+  <p>
+    Revenue is a take-rate on minutes of human attention, funded from a prepaid wallet. That has
+    three consequences worth naming:
+  </p>
+  <ul>
+    <li><strong>Revenue is bounded by astrologer hours.</strong> Every rupee requires a
+      simultaneously-available practitioner. Growth in demand without growth in supply produces
+      queues, not income.</li>
+    <li><strong>Revenue is peak-constrained.</strong> Consultation demand concentrates in the
+      evening. Daytime capacity is largely idle, and idle capacity in a per-minute model earns
+      nothing at all.</li>
+    <li><strong>Revenue is anxiety-correlated.</strong> Per-minute consultation is a distress
+      purchase. That makes the top line a function of how worried the country felt this
+      month — volatile, and not something a subscription line would suffer from.</li>
+  </ul>
+
+  <h3>2.4 &nbsp;Where value leaks today</h3>
+  <table>
+    <tr><th>Leak</th><th>Mechanism</th><th class="n">Est. cost</th></tr>
+    <tr><td>Consult preamble</td><td>The first 3–4 minutes of a live consult re-establish birth details and prior context the platform already holds</td><td class="n">≈₹50/call<br /><span class="src">at ₹15/min</span></td></tr>
+    <tr><td>Episodic usage</td><td>No daily surface tied to the user's own chart, so the app is opened only in crisis</td><td class="n">70–75%<br /><span class="src">never return</span></td></tr>
+    <tr><td>Private by default</td><td>Relationship readings — the single largest query category — produce nothing shareable</td><td class="n">K ≈ 0<br /><span class="src">no organic loop</span></td></tr>
+    <tr><td>Disposable history</td><td>Advice evaporates when the call ends; no switching cost accrues</td><td class="n">0<br /><span class="src">lock-in</span></td></tr>
+    <tr><td>Idle daytime supply</td><td>Live-only delivery cannot time-shift into off-peak hours</td><td class="n">~50%<br /><span class="src">of roster hours</span></td></tr>
+  </table>
+
+  <div class="foot">
+    Note on method: this teardown is built from public sources — the AstroLive website and app-store
+    listings, and press coverage of the launch. We had no access to internal analytics, so leak
+    magnitudes are reasoned estimates from published pricing, and are presented as such.
+  </div>
+</section>
+
+<!-- ============================ 3. BENCHMARK ============================ -->
+<section class="page">
+  <div class="kicker">Section 3</div>
+  <h2>Competitive benchmark</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Every claim later in this report is priced against these figures. Each row carries its basis, so
+    a reader can discount the estimates without discarding the argument.
+  </p>
+
+  <h3>3.1 &nbsp;The incumbent</h3>
+  <table>
+    <tr><th>Metric</th><th class="n">Figure</th><th>Basis</th><th>Source</th></tr>
+    <tr><td>FY25 total revenue</td><td class="n">₹1,214 Cr</td><td><span class="pill co">company</span></td><td class="src">Outlook Business; BW Disrupt</td></tr>
+    <tr><td>FY25 growth</td><td class="n">+85% YoY</td><td><span class="pill co">company</span></td><td class="src">from ₹656 Cr in FY24</td></tr>
+    <tr><td>FY25 profit</td><td class="n">≈₹250 Cr</td><td><span class="pill co">company</span></td><td class="src">FY25 reporting</td></tr>
+    <tr><td>Monthly transacting users</td><td class="n">1.5 M</td><td><span class="pill co">company</span></td><td class="src">FY25 summaries</td></tr>
+    <tr><td>Astrologers</td><td class="n">41,000+</td><td><span class="pill co">company</span></td><td class="src">FY25 reporting</td></tr>
+    <tr><td>Average transaction value</td><td class="n">₹230</td><td><span class="pill co">company</span></td><td class="src">FY25 summaries</td></tr>
+    <tr><td>Store revenue (non-meter)</td><td class="n">₹140 Cr</td><td><span class="pill co">company</span></td><td class="src">FY25; ≈₹200 Cr run-rate</td></tr>
+    <tr><td>Repeat-user rate</td><td class="n">25–30%</td><td><span class="pill tp">third-party</span></td><td class="src">case-study analyses</td></tr>
+    <tr><td>Revenue from repeat users</td><td class="n">≈80%</td><td><span class="pill tp">third-party</span></td><td class="src">case-study analyses</td></tr>
+    <tr><td>CAC</td><td class="n">₹600–900</td><td><span class="pill tp">third-party</span></td><td class="src">growth analyses</td></tr>
+    <tr><td>LTV</td><td class="n">≈₹1,500</td><td><span class="pill tp">third-party</span></td><td class="src">growth analyses</td></tr>
+    <tr><td>Marketing spend</td><td class="n">20–25% of revenue</td><td><span class="pill tp">third-party</span></td><td class="src">≈₹236–296 Cr</td></tr>
+    <tr><td>Organic share of traffic</td><td class="n">77%</td><td><span class="pill tp">third-party</span></td><td class="src">SEO case study</td></tr>
+  </table>
+
+  <h3>3.2 &nbsp;What the two companies actually look like side by side</h3>
+  <table>
+    <tr><th>&nbsp;</th><th class="n">AstroLive</th><th class="n">Astrotalk</th><th>Implication</th></tr>
+    <tr><td>Paying users</td><td class="n">~100,000</td><td class="n">1,500,000</td><td>≈15× scale gap</td></tr>
+    <tr><td>Astrologers</td><td class="n">1,500</td><td class="n">41,000</td><td>≈27× supply gap</td></tr>
+    <tr><td>Users per astrologer</td><td class="n">≈67</td><td class="n">≈37</td><td><strong>AstroLive's roster carries ~1.8× the load</strong></td></tr>
+    <tr><td>Disclosed funding</td><td class="n">None</td><td class="n">Funded, IPO-track</td><td>no CAC auction is winnable</td></tr>
+    <tr><td>Primary channel</td><td class="n">Paid + app store</td><td class="n">77% organic search</td><td>incumbent's moat is time, not money</td></tr>
+    <tr class="tot"><td>Strategic conclusion</td><td colspan="3">Compete on a channel the incumbent's product shape cannot easily adopt.</td></tr>
+  </table>
+
+  <h3>3.3 &nbsp;Precedents the design borrows from</h3>
+  <table>
+    <tr><th>Precedent</th><th>Result</th><th>What it establishes</th></tr>
+    <tr><td><strong>Co&ndash;Star</strong></td><td>20–30 M users, grown substantially on friend-compatibility sharing; social-sharing astrology tools lifted discovery 30–60% among young users<sup>6</sup></td><td>Astrology is inherently social. Sharing is not a bolt-on — it is the natural shape of the product.</td></tr>
+    <tr><td><strong>Dropbox referrals</strong></td><td>3900% growth in 15 months; permanent +60% signup volume<sup>7</sup></td><td>A referral built into the core value proposition outperforms one bolted onto the marketing surface.</td></tr>
+    <tr><td><strong>Duolingo streaks</strong></td><td>Churn cut from 47% to 28%; ~3× growth in the share of DAU holding a 7-day streak; Streak Freeze cut at-risk churn 21%<sup>8</sup></td><td>A free daily ritual is the cheapest retention mechanism available, and it compounds.</td></tr>
+    <tr><td><strong>Brynjolfsson, Li &amp; Raymond,<br />&ldquo;Generative AI at Work&rdquo;</strong><br /><span class="src">QJE 2025 / NBER w31161</span></td><td>5,179 support agents: <strong>+14% throughput on average, +34% for novices</strong>, minimal effect on top performers<sup>9</sup> <span class="pill rev">peer-reviewed</span></td><td>AI assistance raises the output of a human service roster, and lifts newcomers most — the exact cohort a roster scaling from 1,500 consists of.</td></tr>
+    <tr><td><strong>Astrotalk's own store</strong></td><td>₹140 Cr FY25, ≈₹200 Cr run-rate<sup>3</sup></td><td>Revenue beyond the per-minute meter is proven at scale in this exact market.</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Note on the AI evidence.</strong> We deliberately anchor the capacity claim to a
+    peer-reviewed field experiment rather than a vendor case study. The +34% novice figure is the
+    load-bearing one: scaling a roster means onboarding inexperienced practitioners, and that is
+    precisely the cohort the paper finds gains most.
+  </div>
+</section>
+
+<!-- ============================ 4. GAPS ============================ -->
+<section class="page">
+  <div class="kicker">Section 4</div>
+  <h2>Four structural gaps</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Each gap is attached to a number rather than an intuition. Together they define the problem the
+    prototype solves.
+  </p>
+
+  <h3>Gap 1 &middot; No structural virality</h3>
+  <p>
+    Astrology is inherently relational. Marriage compatibility, partner questions and family
+    decisions dominate Indian astrology demand — Kundli matching exists as a product category for
+    exactly this reason, and Astrotalk's Love Calculator draws 381,000 visits a month on its
+    own.<sup>4</sup> Yet consultation is strictly one-to-one and private. A user asks about their
+    marriage, receives an answer, and <em>nothing leaves the app</em>. The other person in the
+    question — who is at least as invested in the answer — is never touched.
+  </p>
+  <p>
+    The consequence is that growth must be purchased. At ₹600–900 per user against an incumbent
+    spending ₹236–296 crore a year, that is a losing auction for an unfunded challenger.
+  </p>
+
+  <h3>Gap 2 &middot; No habit loop</h3>
+  <p>
+    The free tools — daily horoscope, love calculator, Panchang — are commodity content available
+    on a hundred sites. They attract; they do not retain. Nothing in the product is tied to
+    <em>this user's</em> chart in a way that makes tomorrow's visit meaningful, so consultation stays
+    crisis-triggered and episodic.
+  </p>
+  <div class="callout">
+    The category leader's repeat rate is <strong>25–30%</strong>.<sup>5</sup> Roughly
+    <strong>70–75% of paying users transact once and never come back</strong> — and that is the best
+    performance in the market. Meanwhile ~80% of Astrotalk's revenue comes from the repeat minority,
+    which tells us precisely where the value is and how little of it is being captured.
+  </div>
+
+  <h3>Gap 3 &middot; Revenue is ceilinged by astrologer supply-hours</h3>
+  <p>
+    Per-minute billing means revenue scales only with live human availability. AstroLive runs ~67
+    paid users per astrologer against Astrotalk's ~37 — its roster already carries close to double
+    the load. Reaching 10 lakh users at even that stretched ratio requires ~15,000 astrologers, a
+    10× recruitment problem that moves far slower than demand. And because live demand concentrates
+    in the evening, roughly half of available roster hours earn nothing.
+  </p>
+
+  <h3>Gap 4 &middot; The meter is an anxiety tax</h3>
+  <p>
+    A per-minute clock charges people for thinking. Someone in genuine distress — the modal
+    user — rushes their question, receives a worse answer for it, and remembers the platform as
+    expensive. It also suppresses first purchase: an open-ended meter is a far harder first
+    commitment than a fixed price, precisely at the top of the funnel where conversion matters most.
+  </p>
+
+  <h3>How the gaps compound</h3>
+  <div class="formula">
+no virality  →  growth must be bought  →  CAC ₹600–900
+no habit     →  70–75% never return    →  LTV never recovers that CAC
+supply cap   →  demand growth queues   →  paid acquisition is wasted on a queue
+meter tax    →  first purchase resisted →  the funnel narrows before it starts
+  </div>
+  <p>
+    They are not four separate problems. Buying users you cannot serve, who do not return, is the
+    same problem observed from four angles — which is why the solution has to address all four at
+    once rather than picking the easiest.
+  </p>
+</section>
+
+<!-- ============================ 5. WHY OBVIOUS FAILS ============================ -->
+<section class="page">
+  <div class="kicker">Section 5</div>
+  <h2>Why the obvious answers fail</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Four moves any team would propose first. Each fails arithmetically, and saying why is how we
+    arrived at what remains. This critique is aimed at the arithmetic, never at the operators.
+  </p>
+
+  <h3>5.1 &nbsp;&ldquo;Spend more on acquisition&rdquo;</h3>
+  <div class="formula">
+900,000 net new paid users × ₹750 CAC  ≈  ₹67.5 crore
+Astrotalk annual marketing              ≈  ₹236–296 crore
+AstroLive disclosed funding             =   none
+  </div>
+  <p>
+    Even at the favourable end of the CAC band this is a ₹54 crore commitment, and the incumbent can
+    outbid any level AstroLive reaches. Paid acquisition is a channel where the better-capitalised
+    party wins by definition.
+  </p>
+
+  <h3>5.2 &nbsp;&ldquo;Build an SEO engine like theirs&rdquo;</h3>
+  <p>
+    77% of Astrotalk's traffic is organic, off a content system with years of accumulated domain
+    authority; 83% of its targeted keywords are informational, and it converts that traffic in the
+    app.<sup>4</sup> Search authority is a <em>time-compounding</em> moat: the input is years, and
+    money accelerates it only marginally. A company that began operations in September 2024, with no
+    funding runway to wait, cannot arrive before the runway ends. Worth pursuing as a long-term
+    hedge; useless as the answer to the current question.
+  </p>
+
+  <h3>5.3 &nbsp;&ldquo;Recruit far more astrologers&rdquo;</h3>
+  <p>
+    This is the right instinct about the constraint and the wrong instrument. Astrologer supply is
+    a trust-and-vetting problem, not a listings problem — quality screening is precisely what the
+    incumbent treats as part of its moat. Recruiting 13,500 practitioners while keeping quality
+    intact is slower than user acquisition, so demand growth converts into queues. Recruitment
+    should continue; it cannot be the mechanism that closes a 10× gap.
+  </p>
+
+  <h3>5.4 &nbsp;&ldquo;Ship an AI astrologer&rdquo;</h3>
+  <p>
+    The most tempting move in 2026, and the one we most deliberately refused. It fails twice.
+  </p>
+  <div class="grid2">
+    <div class="box">
+      <h4>It is already commoditised</h4>
+      <p style="margin:0">
+        AstroGPT, Om.AI and AstroSage's AI layer all ship a conversational AI astrologer
+        today.<sup>10</sup> Building a fifth differentiates nothing, and any competitor can clone it
+        in a sprint.
+      </p>
+    </div>
+    <div class="box gold">
+      <h4>It cannibalises the business</h4>
+      <p style="margin:0">
+        AstroLive's revenue is ₹10–15 per minute of <em>human</em> attention. Users pay for a named
+        person who is accountable for what they said about their marriage. An AI answering paid
+        questions competes with the supply side the marketplace is built on.
+      </p>
+    </div>
+  </div>
+  <div class="callout plum">
+    <strong>The scarce asset is not intelligence — it is accountable intelligence.</strong> Model
+    capability is abundant and getting cheaper; a named practitioner who will stand behind a
+    judgement about your marriage is not. The correct use of AI is therefore to make more of that
+    accountable capacity available, never to substitute for it. §7 turns this into an enforceable
+    architecture rather than a sentiment.
+  </div>
+
+  <h3>What survives</h3>
+  <p>
+    Exactly two things: growth that is <em>structural</em> (built into the product mechanic, at ~₹0
+    marginal cost per acquired user) and capacity that comes from <em>throughput per astrologer</em>
+    rather than headcount. Both happen to play to AstroLive's specific advantages — a parent company
+    with viral social DNA, and an async voice-note primitive already shipped.
+  </p>
+</section>
+
+<!-- ============================ 6. SOLUTION ============================ -->
+<section class="page">
+  <div class="kicker">Section 6</div>
+  <h2>The solution: four modules</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    One product. Each module addresses one gap, and each strengthens the others — the invite creates
+    users, the habit keeps them, the capacity layer serves them, and the memory makes leaving costly.
+  </p>
+
+  <h3>6.1 &nbsp;Sutra Invite &nbsp;<span class="pill">structural virality</span></h3>
+  <p>
+    A compatibility reading is computed from <em>two</em> charts, so it genuinely cannot be completed
+    alone. The user asks their question, and the reading stays locked until the other person opens a
+    link and adds their birth details. AI generates a free teaser instantly so there is something
+    worth sending; the full reading requires both charts <em>and</em> a named astrologer.
+  </p>
+  <p><strong>Why this converts where a referral banner does not:</strong></p>
+  <ul>
+    <li>The invitee is not being asked for a favour. They are being offered the answer to a question
+      they are also curious about — sent by their own partner or parent, not by a brand.</li>
+    <li>The reward is the product itself, not a wallet credit, so it attracts genuinely interested
+      users rather than incentive farmers.</li>
+    <li>The invitee arrives having entered full birth details — a materially better signup than an
+      anonymous paid install.</li>
+    <li>It is not clonable by the incumbent in a sprint, because it requires a relationship graph
+      that a search-driven, solo-user funnel does not have.</li>
+  </ul>
+
+  <h3>6.2 &nbsp;Transit feed and streak &nbsp;<span class="pill">habit</span></h3>
+  <p>
+    Not a generic horoscope. Two things make this retentive. First, the daily card is computed
+    against the user's own chart. Second — and this is the mechanism that matters — the astrologer's
+    consultation notes are converted into <strong>dated watch-days</strong>: when an astrologer says
+    &ldquo;Saturn enters your 10th house on 12 September, decide then&rdquo;, that becomes a calendar
+    entry that surfaces on the day, with one tap back into a context-preloaded consult.
+  </p>
+  <div class="callout">
+    This is the reason to open the app on a day when nothing is wrong — and it is only possible with
+    AI, because it means turning unstructured consultation notes into a structured, dated calendar.
+    The streak layer is free and costs nothing marginal to run. Benchmark: Duolingo cut churn from
+    47% to 28% with this class of mechanic.<sup>8</sup>
+  </div>
+
+  <h3>6.3 &nbsp;AI copilot and async packs &nbsp;<span class="pill">revenue &amp; supply</span></h3>
+  <p><strong>Live side.</strong> During a consult the astrologer sees the chart, past readings and
+    suggested threads on their own screen. This removes the 3–4 minute preamble that currently opens
+    every call — roughly ₹50 of billed time per call spent on data the platform already held, and
+    more importantly 3–4 minutes of capacity that could have served the next person.</p>
+  <p><strong>Async side.</strong> AI drafts a first pass from the chart and history; the astrologer
+    edits it and records a voice note in their own voice. AstroLive <em>already ships</em>
+    personalised voice messages — this adds the draft layer that makes them fast enough to sell at a
+    fixed price. Async work is time-shiftable, so it fills the daytime trough that live-only
+    delivery leaves idle.</p>
+  <p><strong>The pricing that follows:</strong> a flat monthly Guidance Plan, and prepaid Question
+    Packs for users who will not accept a subscription. Note this executes on a subscription tier
+    AstroLive has <em>already publicly announced</em><sup>1</sup> — the contribution here is not the
+    idea of subscribing, it is the mechanism that makes flat pricing deliverable without a margin
+    trap.</p>
+
+  <h3>6.4 &nbsp;Sutra Memory &nbsp;<span class="pill">USP</span></h3>
+  <p>
+    Every reading logged, AI-indexed, semantically searchable, and portable <em>across</em>
+    astrologers. &ldquo;What did astrologers tell me about my career last year?&rdquo; returns the
+    named practitioner, the date, and their actual words.
+  </p>
+  <p>
+    This is the only module that is a moat rather than a tactic. Competitors treat a consultation as
+    a disposable transaction, which is exactly why switching platforms costs a user nothing today.
+    Four readings deep, leaving means abandoning the only written record of your own
+    guidance — and unlike a wallet balance, that record grows every time the product is used.
+    Crucially, memory search returns <em>the human's past words with attribution</em>; it never
+    invents a new judgement.
+  </p>
+
+  <table style="margin-top:12pt">
+    <tr><th>Module</th><th>Gap closed</th><th>Primary metric</th><th>Evidence base</th></tr>
+    <tr><td>Sutra Invite</td><td>1 — virality</td><td>K-factor; blended CAC</td><td>Co&ndash;Star; Dropbox</td></tr>
+    <tr><td>Transit feed + streak</td><td>2 — habit</td><td>D30 return rate; repeat share</td><td>Duolingo</td></tr>
+    <tr><td>Copilot + async packs</td><td>3 &amp; 4 — supply, meter</td><td>Answers per astrologer-hour; subscription share</td><td>Brynjolfsson et al.</td></tr>
+    <tr><td>Sutra Memory</td><td>2 &amp; 4 — retention, trust</td><td>Readings per user; churn</td><td>Retention/LTV literature</td></tr>
+  </table>
+</section>
+
+<!-- ============================ 7. AI ARCHITECTURE ============================ -->
+<section class="page">
+  <div class="kicker">Section 7</div>
+  <h2>The AI architecture</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    One principle, enforced as a data structure rather than a policy document:
+    <strong>AI expands astrologer capacity; it never replaces astrologer accountability.</strong>
+  </p>
+
+  <p>
+    In the prototype every AI surface is tagged in code as either <code>ai-owned</code> or
+    <code>human-signed</code>. The split is not stylistic — it follows the commercial logic that a
+    paid judgement is what users are actually buying.
+  </p>
+
+  <div class="grid2">
+    <div class="box plum">
+      <h4>AI owns breadth &nbsp;<span class="pill">free</span></h4>
+      <ul class="tight">
+        <li><strong>Daily transit card</strong> — no quantity of astrologer hours could produce one narration per user per day.</li>
+        <li><strong>Chart explainer</strong> — explaining a placement is education, not judgement.</li>
+        <li><strong>Question framing</strong> — helps a distressed user articulate the question before the meter starts.</li>
+        <li><strong>Synastry teaser</strong> — must be instant and free or the invite loop never starts.</li>
+        <li><strong>Note structuring</strong> — converts consult notes into dated watch-days. Mechanical, post-call.</li>
+        <li><strong>Memory search</strong> — retrieval over the user's own history.</li>
+      </ul>
+    </div>
+    <div class="box gold">
+      <h4>Humans own depth &nbsp;<span class="pill">paid &middot; signed</span></h4>
+      <ul class="tight">
+        <li><strong>Async answer</strong> — AI drafts; the astrologer edits, records and signs. Never delivered unreviewed.</li>
+        <li><strong>Live consultation</strong> — fully human. AI appears only on the astrologer's own screen.</li>
+        <li><strong>Remedies and muhurat</strong> — prescriptive, consequential, culturally weighted. Never model-generated.</li>
+        <li><strong>Full synastry reading</strong> — the monetised depth behind the free teaser.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The three rules</h3>
+  <ol>
+    <li><strong>No paid answer is model-generated.</strong> Drafts exist only inside the astrologer's
+      console, and the astrologer can discard one outright. If a draft were made hard to refuse, the
+      model would have quietly become the practitioner.</li>
+    <li><strong>Every AI string is labelled in the product</strong> — including whether it was
+      generated live or pre-written. A faith product that is vague about which words came from a
+      machine has already lost the thing it sells.</li>
+    <li><strong>AI never prescribes.</strong> Anything touching money, marriage, health or law stays
+      human. The free tier describes; it does not instruct. In the prototype's astrologer console
+      one draft explicitly declines to advise on an investment instrument and hands that back to a
+      qualified human — the boundary is demonstrated, not merely asserted.</li>
+  </ol>
+
+  <h3>Why this is also the commercially correct choice</h3>
+  <table>
+    <tr><th>&nbsp;</th><th>AI as paid oracle</th><th>AI as capacity layer</th></tr>
+    <tr><td>Differentiation</td><td>None — four competitors ship it<sup>10</sup></td><td>Requires a marketplace to amplify; not clonable standalone</td></tr>
+    <tr><td>Effect on supply side</td><td>Competes with astrologers</td><td>Raises astrologer earnings per hour</td></tr>
+    <tr><td>Effect on trust</td><td>Erodes the basis of the ₹10–15/min rate</td><td>Preserves it; every paid word is signed</td></tr>
+    <tr><td>Regulatory exposure</td><td>High — unsupervised advice on consequential matters</td><td>Low — a named human reviews every paid output</td></tr>
+    <tr class="tot"><td>Verdict</td><td colspan="2">The capacity layer is the only version that survives contact with the business model.</td></tr>
+  </table>
+
+  <h3>Implementation in the prototype</h3>
+  <p>
+    The live tier calls <code>claude-opus-5</code> through the official Anthropic SDK. Because the
+    prototype is a public static page and a static build cannot hold a secret, <strong>no API key is
+    bundled</strong>: the default experience shows clearly-labelled pre-written output, and a viewer
+    who wants to watch generation happen supplies their own key, which is stored only in their own
+    browser. A failed live call degrades silently to the pre-written text rather than showing an
+    error, so the demo can never dead-end.
+  </p>
+</section>
+
+<!-- ============================ 8. PROTOTYPE ============================ -->
+<section class="page">
+  <div class="kicker">Section 8</div>
+  <h2>Prototype walkthrough</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    A working web application, not a clickable mockup. Ten routes, real computation, and state that
+    persists. Below: the acquisition loop, which is the part worth verifying yourself.
+  </p>
+
+  <div class="grid2">
+    <figure class="shot-tall">
+      <img src="shots/05-join-lock.png" alt="Invite landing, locked" />
+      <figcaption><b>1. A stranger opens the invite link.</b> No account, no prior visit, empty
+        browser storage. They see who invited them, the actual question asked, that person's chart,
+        and a deliberately visible locked half. The only way forward is to add their own
+        details — which is the acquisition event.</figcaption>
+    </figure>
+    <figure class="shot-tall">
+      <img src="shots/06-join-open.png" alt="Invite landing, unlocked" />
+      <figcaption><b>2. Both charts present, reading unlocked.</b> A computed compatibility score,
+        an AI-written teaser labelled as AI, and four scored axes. The paid depth — house overlay,
+        decision-window timing — is named but withheld for a human astrologer.</figcaption>
+    </figure>
+  </div>
+
+  <div class="callout" style="margin-top:12pt">
+    <strong>Why this works with no backend, and why that matters.</strong> The invite payload is
+    encoded into the URL <em>fragment</em>, so the recipient's browser can compute the joint chart
+    locally. Two consequences: the mechanic is fully demonstrable on a static host, and birth details
+    never reach a server, because fragments are not transmitted in HTTP requests. Routing is
+    hash-based so deep links survive a cold load on GitHub Pages — a judge clicking an invite link
+    was the single failure mode we were least willing to accept.
+  </div>
+
+  <div class="grid2" style="margin-top:10pt">
+    <figure class="shot-tall">
+      <img src="shots/01-home.png" alt="Daily transit home screen" />
+      <figcaption><b>3. The habit surface.</b> A daily card computed against the user's own chart,
+        a streak, and watch-days that each trace back to a named astrologer's past claim — with
+        one-tap re-entry into a context-preloaded consult.</figcaption>
+    </figure>
+    <figure class="shot-tall">
+      <img src="shots/03-memory.png" alt="Sutra Memory" />
+      <figcaption><b>4. Sutra Memory.</b> Every reading logged across astrologers, with a semantic
+        search that answers from the user's own history and attributes each answer to the
+        practitioner and date.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="page">
+  <figure class="shot-wide">
+    <img src="shots/08-astrologer.png" alt="Astrologer console" />
+    <figcaption><b>5. The astrologer console — the supply side.</b> An async review queue where AI
+      has drafted a first pass with chart and prior context attached; the astrologer edits, or
+      discards the draft entirely and writes their own. The utilisation chart shows the actual
+      economic point: live demand is nearly all evening, and async answers are time-shiftable, so
+      the same roster earns across more of the day without anyone working longer hours.</figcaption>
+  </figure>
+
+  <div class="grid2" style="margin-top:12pt">
+    <figure class="shot-tall">
+      <img src="shots/07-consult.png" alt="Consult screen" />
+      <figcaption><b>6. Asking a question.</b> The screen leads with what the astrologer
+        <em>already has</em> — chart, prior readings, and the last thing they told this user — and
+        offers a fixed-price async answer alongside the per-minute call.</figcaption>
+    </figure>
+    <figure class="shot-tall">
+      <img src="shots/04-plans.png" alt="Guidance Plans" />
+      <figcaption><b>7. Guidance Plans.</b> Each tier states its per-minute equivalent, so the
+        value is legible against the meter the user already understands.</figcaption>
+    </figure>
+  </div>
+
+  <h3 style="margin-top:14pt">Technical notes, stated plainly</h3>
+  <table>
+    <tr><th>Aspect</th><th>Implementation</th></tr>
+    <tr><td>Stack</td><td>React 19, TypeScript, Vite, Tailwind. Static build, deployed via GitHub Actions to GitHub Pages.</td></tr>
+    <tr><td>Routing</td><td>Hash-based, so deep links survive a cold load on a static host.</td></tr>
+    <tr><td>State</td><td>React context over <code>localStorage</code>. No backend, no accounts, nothing uploaded.</td></tr>
+    <tr><td>Invite transport</td><td>Base64url-encoded JSON in the URL fragment. Order-independent and deterministic, so both sides compute the same result.</td></tr>
+    <tr><td>Sun sign</td><td><strong>Real.</strong> Correct tropical-zodiac boundaries for any birth date.</td></tr>
+    <tr><td>Other placements</td><td><strong>Simulated ephemeris</strong> — a deterministic hash of the birth details, not astronomy. Labelled as such in the app UI. Production would substitute Swiss Ephemeris server-side; no layer above this changes.</td></tr>
+    <tr><td>AI</td><td><code>claude-opus-5</code> via the official Anthropic SDK. Pre-written output by default; live generation only with a viewer-supplied key held in their own browser.</td></tr>
+  </table>
+</section>
+
+<!-- ============================ 9. GROWTH MODEL ============================ -->
+<section class="page">
+  <div class="kicker">Section 9</div>
+  <h2>Growth model</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Modelled deliberately conservatively. The prototype ships this as a live calculator with every
+    input editable, so a sceptical reader can drive the assumptions down and see what survives.
+  </p>
+
+  <h3>9.1 &nbsp;The invite loop</h3>
+  <div class="formula">
+K  =  relational share × invites per asker × send rate × acceptance rate
+   =  0.50 × 1.6 × 0.60 × 0.45
+   =  <strong>0.216</strong>
+  </div>
+  <table>
+    <tr><th>Input</th><th class="n">Value</th><th>Justification</th></tr>
+    <tr><td>Share asking a relational question</td><td class="n">50%</td><td>Marriage/partner/family questions dominate Indian astrology demand</td></tr>
+    <tr><td>Invites sent per asker</td><td class="n">1.6</td><td>A user may check a partner, then a parent, then a co-founder</td></tr>
+    <tr><td>Of those, actually send</td><td class="n">60%</td><td>Higher than a referral banner because the reading is <em>locked</em> until they do</td></tr>
+    <tr><td>Acceptance rate</td><td class="n">45%</td><td>A personal message from a partner or parent, not a marketing push</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>We are not claiming exponential growth, and any submission that does should be
+    distrusted.</strong> K = 0.216 is below 1, so the loop is not self-sustaining, and we deliberately
+    do not compound it across generations — a referred user is not modelled as referring further.
+    What it does is act as a one-time multiplier on acquisition already being paid for: every 100
+    paid users bring ~22 more free, a <strong>1.22× multiplier</strong> that drags blended CAC from
+    ₹750 to <strong>₹617</strong>. Dropbox's K of 1.5–2.0<sup>7</sup> is what a best case looks
+    like; we have modelled roughly a tenth of it.
+  </div>
+
+  <h3>9.2 &nbsp;What that does to the 10-lakh target</h3>
+  <table>
+    <tr><th>Scenario</th><th class="n">CAC</th><th class="n">Cost of 900,000 users</th></tr>
+    <tr><td>Paid acquisition only</td><td class="n">₹750</td><td class="n">₹68 Cr</td></tr>
+    <tr><td>With the invite loop</td><td class="n">₹617</td><td class="n">₹56 Cr</td></tr>
+    <tr class="tot"><td>Saving</td><td class="n">&mdash;</td><td class="n">₹12 Cr</td></tr>
+  </table>
+  <p>
+    For an unfunded company, ₹12 crore of avoided spend is not a marketing optimisation. It is the
+    difference between a plan that requires a funding round and one that does not.
+  </p>
+
+  <h3>9.3 &nbsp;Retention — where the real money is</h3>
+  <p>
+    This required care, because the published figures only reconcile one way, and getting it wrong
+    produces a nonsense result. &ldquo;25–30% repeat users&rdquo;, &ldquo;ATV ₹230&rdquo; and
+    &ldquo;LTV ≈₹1,500&rdquo; are three separately-sourced numbers. ₹1,500 at ₹230 per transaction
+    implies ~6.5 transactions per acquired user, while only ~27% ever return — so the repeaters must
+    carry almost everything. That is exactly what the independently-reported &ldquo;80% of revenue
+    from repeat users&rdquo; says.
+  </p>
+  <div class="formula">
+transactions per user  =  1  +  repeat share × extra transactions per repeater
+
+  baseline:  6.52  =  1 + 0.27 × 20.5      ← 20.5 is <em>derived</em> from the cited LTV
+  with habit: 10.0  =  1 + 0.44 × 20.5
+
+  LTV: ₹1,500  →  ₹2,300   (<strong>+53%</strong>, with no increase in spend per transaction)
+  </div>
+  <div class="callout plum">
+    <strong>A modelling trap worth flagging.</strong> Treating the 25–30% repeat rate as a
+    per-transaction repurchase probability instead gives an LTV of ~₹315 and an LTV:CAC below
+    1 — i.e. it implies the category leader is deeply lossmaking, which its ₹250 crore FY25 profit
+    flatly contradicts. We mention this because it is an easy error to make and it inverts the
+    conclusion. Deriving the tail from the cited LTV keeps the model consistent with its own sources.
+  </div>
+
+  <h3>9.4 &nbsp;Combined effect</h3>
+  <div class="grid4">
+    <div class="stat"><div class="l">Blended CAC</div><div class="v">₹617</div><div class="s">from ₹750</div></div>
+    <div class="stat"><div class="l">LTV</div><div class="v">₹2,300</div><div class="s">from ₹1,500</div></div>
+    <div class="stat"><div class="l">LTV : CAC now</div><div class="v">2.00×</div><div class="s">₹1,500 / ₹750</div></div>
+    <div class="stat"><div class="l">LTV : CAC after</div><div class="v">3.73×</div><div class="s">₹2,300 / ₹617</div></div>
+  </div>
+  <p style="margin-top:8pt">
+    Both levers together move LTV:CAC from 2.0× to 3.73×. The retention lever contributes materially
+    more than the virality lever — which is why we built the habit loop rather than stopping at the
+    invite mechanic, even though the invite is the more eye-catching demo.
+  </p>
+</section>
+
+<!-- ============================ 10. REVENUE ============================ -->
+<section class="page">
+  <div class="kicker">Section 10</div>
+  <h2>Revenue model</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Two new lines, neither of which requires recruiting a single additional astrologer.
+  </p>
+
+  <h3>10.1 &nbsp;The capacity arithmetic</h3>
+  <p>
+    A fixed-price plan sold against purely live human hours is a margin trap: you promise
+    near-unlimited access against a supply you cannot scale. Async answers with an AI first draft
+    break that, because the astrologer's marginal minutes per answer fall far enough for a fixed
+    price to clear.
+  </p>
+  <table>
+    <tr><th>&nbsp;</th><th class="n">Compose from scratch</th><th class="n">Review an AI draft</th></tr>
+    <tr><td>Astrologer minutes per async answer</td><td class="n">~9 min</td><td class="n">~1.5 min</td></tr>
+    <tr><td>Answers per astrologer-hour</td><td class="n">≈6.7</td><td class="n">≈40</td></tr>
+    <tr><td>Fixed price sustainable at ₹83/answer?</td><td class="n">No</td><td class="n">Yes</td></tr>
+    <tr class="tot"><td>Basis</td><td colspan="2">Direction and skew evidenced by Brynjolfsson et al. (+14% avg, +34% novices).<sup>9</sup> The specific minute figures are our modelled assumptions, not measured — see §15.</td></tr>
+  </table>
+
+  <h3>10.2 &nbsp;Plan structure</h3>
+  <table>
+    <tr><th>Tier</th><th class="n">Price</th><th>Contents</th><th>Per-minute equivalent</th></tr>
+    <tr><td><strong>Free</strong></td><td class="n">₹0</td><td>Daily transit card, streak, full chart, Sutra Memory, unlimited invites</td><td>No meter — nothing to lose by opening the app</td></tr>
+    <tr><td><strong>Question Pack</strong></td><td class="n">₹249</td><td>3 async answers, valid 6 months</td><td>The on-ramp for anyone who finds a meter stressful</td></tr>
+    <tr><td><strong>Sutra Plus</strong></td><td class="n">₹399/mo</td><td>4 async answers, 10% off live, unlimited invites</td><td>≈26 min of ₹15/min calling</td></tr>
+    <tr><td><strong>Sutra Pro</strong></td><td class="n">₹999/mo</td><td>12 async answers, one 20-min live call, priority queue</td><td>≈66 min of calling, call pre-paid</td></tr>
+  </table>
+
+  <h3>10.3 &nbsp;Why this is not simply a discount</h3>
+  <ul>
+    <li><strong>It removes the anxiety tax.</strong> A fixed price lets a distressed user take their
+      time writing the question, which produces a better answer and a better memory of the platform.</li>
+    <li><strong>It converts first-timers.</strong> ₹249 for three answers is a far easier first
+      purchase than an open-ended meter — the largest single barrier at the top of the funnel.</li>
+    <li><strong>It breaks the supply ceiling.</strong> Async is time-shiftable, so it monetises the
+      daytime trough that live-only delivery leaves idle.</li>
+    <li><strong>It makes revenue predictable.</strong> Per-minute revenue tracks national anxiety.
+      Subscription revenue does not — which matters a great deal to a company approaching investors.</li>
+    <li><strong>It is already validated in this market.</strong> Astrotalk's store did ₹140 crore in
+      FY25 at a ≈₹200 crore run-rate.<sup>3</sup> Revenue beyond the meter demonstrably works here.</li>
+  </ul>
+
+  <h3>10.4 &nbsp;Illustrative mix at 500,000 paid users</h3>
+  <p class="src" style="margin-bottom:4pt">
+    Scenario, not forecast. Conversion rates are assumptions and are stated so a reader can replace
+    them.
+  </p>
+  <table>
+    <tr><th>Line</th><th class="n">Users</th><th class="n">ARPU / mo</th><th class="n">Monthly revenue</th></tr>
+    <tr><td>Per-minute consults (unchanged)</td><td class="n">500,000</td><td class="n">₹62</td><td class="n">₹31.0 Cr</td></tr>
+    <tr><td>Sutra Plus @ 6% conversion</td><td class="n">30,000</td><td class="n">₹399</td><td class="n">₹12.0 Cr</td></tr>
+    <tr><td>Sutra Pro @ 1.5% conversion</td><td class="n">7,500</td><td class="n">₹999</td><td class="n">₹7.5 Cr</td></tr>
+    <tr><td>Question Packs @ 4%/mo</td><td class="n">20,000</td><td class="n">₹249</td><td class="n">₹5.0 Cr</td></tr>
+    <tr class="tot"><td>Total</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">₹55.5 Cr</td></tr>
+  </table>
+  <p>
+    In this scenario <strong>44% of revenue comes from lines that do not depend on a running
+    meter</strong>, and none of it requires a larger astrologer roster. That is the structural point,
+    and it holds even if every conversion assumption above is halved.
+  </p>
+</section>
+
+<!-- ============================ 11. IMPACT ============================ -->
+<section class="page">
+  <div class="kicker">Section 11</div>
+  <h2>Expected impact</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Stated as ranges with the assumptions attached, because a single-point forecast from outside the
+    company would be false precision.
+  </p>
+
+  <table>
+    <tr><th>Outcome</th><th class="n">Baseline</th><th class="n">Modelled</th><th>Driver &amp; confidence</th></tr>
+    <tr><td>Blended CAC</td><td class="n">₹750</td><td class="n">₹617</td><td>Invite loop at K=0.216. <strong>Medium-high</strong> — mechanic is built and demonstrable; K is modelled.</td></tr>
+    <tr><td>Organic share of new users</td><td class="n">~0%</td><td class="n">~18%</td><td>Invite acceptances as a share of total new. <strong>Medium.</strong></td></tr>
+    <tr><td>Repeat-user share</td><td class="n">27%</td><td class="n">44%</td><td>Daily card + watch-day callbacks. <strong>Medium</strong> — Duolingo achieved a larger swing; we model less.</td></tr>
+    <tr><td>LTV</td><td class="n">₹1,500</td><td class="n">₹2,300</td><td>Derived from repeat share. <strong>Medium.</strong></td></tr>
+    <tr><td>LTV : CAC</td><td class="n">2.00×</td><td class="n">3.73×</td><td>Both levers. <strong>Medium.</strong></td></tr>
+    <tr><td>Answers per astrologer-hour (async)</td><td class="n">≈6.7</td><td class="n">≈40</td><td>Review-vs-compose. <strong>Low-medium</strong> — direction is peer-reviewed, magnitude is ours.</td></tr>
+    <tr><td>Non-meter revenue share</td><td class="n">~0%</td><td class="n">~44%</td><td>Plan conversion assumptions in §10.4. <strong>Low-medium.</strong></td></tr>
+    <tr><td>Cost to reach 10 lakh paid users</td><td class="n">₹68 Cr</td><td class="n">₹56 Cr</td><td>Blended CAC. <strong>Medium-high.</strong></td></tr>
+  </table>
+
+  <h3>The qualitative outcome that matters most</h3>
+  <p>
+    Beyond the numbers, the four modules change what kind of company AstroLive is. Today it is a
+    marketplace that sells minutes of attention, competing on price and astrologer inventory against
+    a better-funded incumbent with a stronger search position. With these modules it becomes a
+    product that <em>owns a relationship graph and a guidance history</em> — two assets that
+    compound with use, cannot be bought, and are not on the incumbent's roadmap because its
+    solo-user, search-driven funnel does not generate them.
+  </p>
+
+  <div class="callout">
+    <strong>The honest summary.</strong> The virality lever is the more impressive demo; the
+    retention lever is worth more money. A 27% → 44% repeat share is a bigger prize than a K of
+    0.216, and it is available to whoever builds the daily habit first. Nobody in this category has,
+    which is why 70–75% of paying users still transact once and disappear.
+  </div>
+
+  <h3>What we would measure in the first 90 days</h3>
+  <ol>
+    <li><strong>Invite send rate</strong> among users asking relational questions. If this is not
+      above 40%, the locked-reading mechanic is not working and the whole acquisition thesis needs
+      revisiting. This is the single fastest falsification test.</li>
+    <li><strong>D30 return rate</strong> for users who receive at least one watch-day, against those
+      who receive none. This isolates the habit mechanism from everything else.</li>
+    <li><strong>Astrologer draft-acceptance rate.</strong> If practitioners discard most AI drafts,
+      the capacity gain is illusory and the async price cannot hold.</li>
+  </ol>
+</section>
+
+<!-- ============================ 12. METRICS ============================ -->
+<section class="page">
+  <div class="kicker">Section 12</div>
+  <h2>Success metrics</h2>
+  <div class="rule"></div>
+
+  <h3>12.1 &nbsp;North Star</h3>
+  <div class="box gold">
+    <h4>Monthly Guided Users</h4>
+    <p style="margin:0">
+      Users who either received a signed answer from a named astrologer or engaged a watch-day
+      traceable to one, in the month. Deliberately chosen over &ldquo;transacting users&rdquo;
+      because it counts <em>guidance delivered</em> rather than minutes billed — so it rises when
+      async and subscriptions substitute for meter time, and it does not reward keeping a distressed
+      user on a call longer than necessary.
+    </p>
+  </div>
+
+  <h3>12.2 &nbsp;Driver metrics</h3>
+  <table>
+    <tr><th>Module</th><th>Primary</th><th>Secondary</th><th class="n">90-day target</th></tr>
+    <tr><td>Sutra Invite</td><td>K-factor</td><td>Invite send rate; accept rate; invitee→paid</td><td class="n">K ≥ 0.15</td></tr>
+    <tr><td>Transit feed</td><td>D30 return rate</td><td>Streak ≥7 days as % of DAU; watch-day tap rate</td><td class="n">+8 pts vs control</td></tr>
+    <tr><td>Copilot &amp; async</td><td>Answers per astrologer-hour</td><td>Draft-acceptance rate; off-peak utilisation</td><td class="n">3× baseline</td></tr>
+    <tr><td>Sutra Memory</td><td>Readings logged per user</td><td>Memory searches per user; 6-month churn</td><td class="n">2.5 avg</td></tr>
+    <tr><td>Revenue</td><td>Non-meter revenue share</td><td>Plan conversion; plan churn</td><td class="n">≥15%</td></tr>
+  </table>
+
+  <h3>12.3 &nbsp;Guardrails — the metrics that must <em>not</em> move</h3>
+  <p>
+    Growth mechanics of this kind fail in predictable ways. Each guardrail below has a defined
+    breach action, because a guardrail without one is decoration.
+  </p>
+  <table>
+    <tr><th>Guardrail</th><th>Why it matters</th><th>Breach action</th></tr>
+    <tr><td><strong>Invite spam reports</strong> &lt; 0.5% of invites</td><td>An invite loop that annoys people damages the brand faster than it grows it</td><td>Cap invites per user per week; require the relationship to be named</td></tr>
+    <tr><td><strong>Astrologer earnings per hour</strong> — must not fall</td><td>If AI raises throughput but cuts pay, the supply side leaves and the marketplace dies</td><td>Renegotiate async revenue share before scaling volume</td></tr>
+    <tr><td><strong>Draft-acceptance rate</strong> &lt; 85%</td><td>A high rate would suggest astrologers are rubber-stamping rather than reviewing</td><td>Audit sampled answers; reduce draft prominence in the console</td></tr>
+    <tr><td><strong>AI-attribution complaints</strong> ≈ 0</td><td>Users must never be unclear about whether a human wrote something</td><td>Escalate labelling prominence; re-audit every AI surface</td></tr>
+    <tr><td><strong>Subscription refund rate</strong> &lt; 5%</td><td>Guards against selling plans the async capacity cannot actually service</td><td>Throttle plan sales to available reviewed capacity</td></tr>
+    <tr><td><strong>Free-tier prescription rate</strong> = 0</td><td>AI must never advise on money, marriage, health or law</td><td>Halt the surface; tighten prompts and re-test</td></tr>
+  </table>
+
+  <div class="callout plum">
+    <strong>The guardrail we would defend hardest</strong> is astrologer earnings per hour. The whole
+    architecture rests on AI making practitioners <em>more</em> valuable. If throughput rises while
+    their income does not, we have built a cost-cutting tool wearing the costume of a growth
+    strategy, and the supply side will correctly leave.
+  </div>
+</section>
+
+<!-- ============================ 13. SCALE ============================ -->
+<section class="page">
+  <div class="kicker">Section 13</div>
+  <h2>Scalability, feasibility and rollout</h2>
+  <div class="rule"></div>
+
+  <h3>13.1 &nbsp;Why this is feasible for <em>this</em> company specifically</h3>
+  <table>
+    <tr><th>Requirement</th><th>AstroLive's position</th></tr>
+    <tr><td>Viral social-graph engineering</td><td>Parent company built Chingari, a viral short-video product. The capability is in-house.<sup>1</sup></td></tr>
+    <tr><td>Async delivery primitive</td><td><strong>Already shipped</strong> — personalised voice messages from astrologers exist in the product today.</td></tr>
+    <tr><td>Subscription billing</td><td>Wallet infrastructure already handles prepaid balances; premium tiers are already announced.<sup>1</sup></td></tr>
+    <tr><td>Astrologer tooling</td><td>Console is additive; it does not change how consultations are delivered.</td></tr>
+    <tr><td>AI inference cost</td><td>Falls almost entirely on free-tier breadth (short daily cards) and drafts. Small relative to a ₹230 ATV.</td></tr>
+    <tr><td>Chart computation</td><td>Swiss Ephemeris is a solved, well-documented server-side dependency.</td></tr>
+  </table>
+  <p>
+    Nothing here requires a technology that does not exist or a capability the company lacks. The
+    hardest part is not engineering — it is the discipline to hold the AI boundary in §7 when
+    shipping an unsupervised AI oracle would be faster.
+  </p>
+
+  <h3>13.2 &nbsp;Rollout in three phases</h3>
+  <table>
+    <tr><th>Phase</th><th>Ship</th><th>Gate to proceed</th></tr>
+    <tr><td><strong>1. Weeks 0–6</strong><br /><span class="src">Prove the loop</span></td><td>Sutra Invite on marriage and partner questions only. Free synastry teaser. Instrument the full funnel.</td><td>Invite send rate &gt; 40% among relational askers; spam reports &lt; 0.5%. <em>If this fails, stop — the acquisition thesis is wrong.</em></td></tr>
+    <tr><td><strong>2. Weeks 6–14</strong><br /><span class="src">Build the habit</span></td><td>Watch-day extraction from consult notes; daily transit card; streaks; Sutra Memory v1.</td><td>D30 return rate +8 pts against a held-back control.</td></tr>
+    <tr><td><strong>3. Weeks 14–24</strong><br /><span class="src">Monetise the capacity</span></td><td>Astrologer copilot; AI-drafted async answers; Question Packs, then subscription tiers.</td><td>Draft-acceptance &gt; 85% <em>and</em> astrologer earnings per hour flat or up.</td></tr>
+  </table>
+  <p>
+    The sequence is deliberate. Virality first, because it is cheapest to test and falsifiable in
+    weeks. Habit second, because retention makes acquired users worth keeping. Monetisation last,
+    because pricing against capacity you have not yet proven is how a fixed-price plan becomes a
+    margin trap.
+  </p>
+
+  <h3>13.3 &nbsp;Scaling considerations</h3>
+  <ul>
+    <li><strong>Language.</strong> Watch-days and daily cards are short-form generated text, so
+      multilingual support is a prompt-and-eval problem rather than a content-production
+      one — directly relevant to the announced regional expansion.<sup>1</sup></li>
+    <li><strong>Inference cost.</strong> Daily cards are the volume driver. Cards are chart-and-date
+      addressable, so they cache and batch across users sharing placements.</li>
+    <li><strong>Invite abuse.</strong> Rate-limit per sender, require a named relationship, and make
+      declining frictionless. Growth that generates complaints is not growth.</li>
+    <li><strong>Privacy.</strong> An invite carries birth details. In the prototype these stay in
+      the URL fragment and never reach a server; production needs an explicit consent step and an
+      expiring token, because birth data is personal information.</li>
+  </ul>
+</section>
+
+<!-- ============================ 14. RISKS ============================ -->
+<section class="page">
+  <div class="kicker">Section 14</div>
+  <h2>Risks</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    The four we consider genuinely capable of sinking this, with what we would do about each.
+  </p>
+
+  <table>
+    <tr><th>Risk</th><th class="n">Severity</th><th>Assessment &amp; mitigation</th></tr>
+    <tr>
+      <td><strong>The invite feels invasive</strong></td>
+      <td class="n">High</td>
+      <td>Asking about a relationship implicates someone who did not opt in. If invites read as
+      surveillance rather than curiosity, the loop poisons the brand. Mitigation: the invitee sees
+      the exact question before deciding; declining is one tap and silent; the inviter is never told
+      the invitee's placements without reciprocity. <strong>We would rather a lower K than an invite
+      anyone regrets receiving.</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Astrologers rubber-stamp drafts</strong></td>
+      <td class="n">High</td>
+      <td>The entire trust architecture assumes genuine review. Under volume pressure, approving
+      unread is the path of least resistance. Mitigation: draft-acceptance rate is a monitored
+      guardrail, sampled answers are audited, and the console makes discarding as easy as approving.
+      If review is not real, the async price is fraudulent and should be withdrawn.</td>
+    </tr>
+    <tr>
+      <td><strong>Subscriptions cannibalise meter revenue</strong></td>
+      <td class="n">Medium</td>
+      <td>Heavy users may migrate from ₹500/month of calls to a ₹399 plan. Mitigation: plans are
+      priced with an explicit per-minute equivalent below current heavy-user spend, and pitched at
+      the ~70% who currently pay <em>once</em>. Phase 3 gating exists to detect this before it
+      scales.</td>
+    </tr>
+    <tr>
+      <td><strong>The incumbent copies the invite</strong></td>
+      <td class="n">Medium</td>
+      <td>The mechanic is not patentable. But it is harder to retrofit than it looks: it needs a
+      relationship graph, reciprocal consent, and a product built around pairs rather than a solo
+      user arriving from search. Our defensibility is Sutra Memory, which compounds per user and
+      cannot be copied — only accumulated.</td>
+    </tr>
+  </table>
+
+  <h3>Risks we judge lower, and why</h3>
+  <ul>
+    <li><strong>AI quality.</strong> Free-tier surfaces are descriptive and low-stakes, and every
+      paid output has a human reviewer. The blast radius of a bad generation is deliberately small.</li>
+    <li><strong>Regulatory.</strong> Keeping prescriptive advice human is the single most effective
+      compliance posture available in this category, and it is architectural rather than procedural.</li>
+    <li><strong>Technical.</strong> No component requires unproven technology.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>The risk we are least able to price</strong> is cultural. Astrology in India is bound up
+    with family authority and life decisions; a mechanic that makes a private consultation social
+    could read as inappropriate in ways a growth model cannot capture. This needs qualitative
+    research with real users before Phase 1 scales, and we would treat a strong negative signal
+    there as disqualifying regardless of what the funnel numbers said.
+  </div>
+</section>
+
+<!-- ============================ 15. LIMITATIONS ============================ -->
+<section class="page">
+  <div class="kicker">Section 15</div>
+  <h2>Limitations and disclosures</h2>
+  <div class="rule"></div>
+  <p class="lede">
+    Stated plainly rather than buried, because a reader who cannot tell which parts are measured and
+    which are modelled cannot evaluate the argument.
+  </p>
+
+  <h3>15.1 &nbsp;What the prototype is not</h3>
+  <ul>
+    <li><strong>No backend.</strong> No server, accounts, or database. State lives in the browser's
+      <code>localStorage</code>. This is why the inviter's device cannot learn that an invite was
+      accepted — production would use a push notification.</li>
+    <li><strong>No real astronomy beyond the sun sign.</strong> Sun sign is computed correctly from
+      tropical-zodiac boundaries. Moon, ascendant and planetary houses come from a
+      <strong>deterministic hash of the birth details</strong> — a simulated ephemeris, labelled as
+      such in the app itself. Production substitutes Swiss Ephemeris server-side; nothing above that
+      layer changes.</li>
+    <li><strong>No payments.</strong> Plan purchase and async credits are simulated.</li>
+    <li><strong>Astrologers, readings and consult notes are fabricated</strong> demo data written to
+      be realistic.</li>
+    <li><strong>AI output is pre-written by default.</strong> Live generation runs only with a
+      viewer-supplied API key, because a public static build cannot hold a secret.</li>
+  </ul>
+
+  <h3>15.2 &nbsp;What is real and verifiable in the prototype</h3>
+  <ul>
+    <li>The invite loop works end-to-end across separate browsers with no shared backend and no
+      prior storage. We verified this by generating an invite in one browser profile and opening it
+      cold in another.</li>
+    <li>Chart and synastry computation is genuinely deterministic and order-independent — the same
+      two people always produce the same score from either side.</li>
+    <li>The growth model recalculates live from editable inputs; the published figures are not
+      hard-coded illustrations.</li>
+    <li>Sun-sign computation is astronomically correct.</li>
+    <li>The live AI path makes real API calls when a key is supplied.</li>
+  </ul>
+
+  <h3>15.3 &nbsp;Data quality</h3>
+  <p>
+    AstroLive's own figures (launch date, paid users, astrologers, target, parent company) are
+    company-reported via press coverage. Astrotalk's revenue, profit, transacting users, astrologer
+    count and ATV are company-reported. <strong>However</strong>, several load-bearing
+    figures — repeat rate 25–30%, CAC ₹600–900, LTV ≈₹1,500, marketing spend 20–25% of revenue, and
+    the 77% organic share — come from third-party analyses and case studies rather than filings.
+    They are labelled <span class="pill tp">third-party</span> throughout and should be treated as
+    indicative. Several sources we attempted to consult directly returned access errors, so a few
+    figures rest on secondary summaries rather than the originals; we have marked those accordingly
+    rather than implying a stronger provenance.
+  </p>
+  <p>
+    We have not adjusted any figure to favour our conclusions. Where the published numbers appeared
+    mutually inconsistent (§9.3), we said so and showed the reconciliation rather than picking
+    whichever reading suited the argument.
+  </p>
+
+  <h3>15.4 &nbsp;Modelled versus measured</h3>
+  <table>
+    <tr><th>Claim</th><th>Status</th></tr>
+    <tr><td>K = 0.216</td><td><strong>Modelled.</strong> Four assumptions, all editable in the prototype. Not observed.</td></tr>
+    <tr><td>Repeat share 27% → 44%</td><td><strong>Modelled.</strong> Benchmarked below Duolingo's achieved swing.</td></tr>
+    <tr><td>≈9 min → ≈1.5 min per async answer</td><td><strong>Modelled.</strong> Direction and skew are peer-reviewed; these specific minute figures are ours and unmeasured.</td></tr>
+    <tr><td>Revenue mix at 500,000 users</td><td><strong>Scenario.</strong> Conversion rates are assumptions, not forecasts.</td></tr>
+    <tr><td>₹50 of preamble per call</td><td><strong>Estimated</strong> from published ₹15/min pricing and an assumed 3–4 min preamble.</td></tr>
+    <tr><td>67 vs 37 users per astrologer</td><td><strong>Derived</strong> by division from company-reported user and astrologer counts.</td></tr>
+    <tr><td>₹54–81 Cr acquisition cost</td><td><strong>Derived</strong> from the company-stated target and third-party CAC band.</td></tr>
+  </table>
+</section>
+
+<!-- ============================ 16. REFERENCES ============================ -->
+<section class="page">
+  <div class="kicker">Section 16</div>
+  <h2>References and AI-tool citation</h2>
+  <div class="rule"></div>
+
+  <h3>16.1 &nbsp;Sources</h3>
+  <ol class="refs">
+    <li><strong>Inc42</strong> — &ldquo;Chingari Parent Enters Spiritual Tech Market With Launch Of
+      AstroLive&rdquo;. Launch date, 100,000+ paid users, 1,500 astrologers, 10-lakh target, parent
+      company and founder, announced subscription tiers, expansion plans.
+      <a href="https://inc42.com/buzz/chingari-parent-enters-spiritual-tech-market-with-launch-of-astrolive/">inc42.com</a>
+      &middot; also <a href="https://yourstory.com/2024/12/chingari-holding-company-enters-faith-astrology-astrolive">YourStory</a>,
+      <a href="https://cxotoday.com/media-coverage/chingari-founders-foray-into-350-billion-faith-and-astrology-market-with-astrolive/">CXOToday</a></li>
+    <li><strong>Tracxn / Crunchbase</strong> — AstroLive and Tech4Billion Media company profiles;
+      funding status, founding year, headquarters.
+      <a href="https://tracxn.com/d/companies/astrolive/__nhQlkzb_8kVj1DQFvm8wGwMZ8fgvA787jzP5SughD6Y">tracxn.com</a>
+      &middot; <a href="https://www.crunchbase.com/organization/astrolive-09df">crunchbase.com</a></li>
+    <li><strong>Outlook Business</strong> — &ldquo;Astrotalk Reports 85% Revenue Growth In FY25&rdquo;;
+      and <strong>BW Disrupt</strong> — &ldquo;Astrotalk Revenue Jumps 85% To Rs 1,214 Cr&rdquo;.
+      FY25 revenue, profit, transacting users, astrologer count, ATV, store revenue.
+      <a href="https://www.outlookbusiness.com/news/astrotalk-reports-85-revenue-growth-in-fy25-as-tier-i-cities-boost-platform-activity">outlookbusiness.com</a>
+      &middot; <a href="https://www.bwdisrupt.com/article/astrotalk-revenue-jumps-85-to-rs-1-214-cr-591016">bwdisrupt.com</a></li>
+    <li><strong>Astrotalk SEO case study</strong> — 77% organic traffic share, Love Calculator
+      381K visits/month, 83% informational keywords, 368K monthly branded searches.
+      <span class="src">nicodigital.com, &ldquo;How Astrotalk Built an Organic Engine…&rdquo;; accessed via search summary — the page itself was not directly retrievable.</span></li>
+    <li><strong>Astrotalk growth and business-model analyses</strong> — repeat-user rate 25–30%,
+      ~80% of revenue from repeat users, CAC ₹600–900, LTV ≈₹1,500, marketing spend 20–25% of
+      revenue.
+      <a href="https://surdeepsingh.com/product-management/case-study/astrotalk-organic-growth-case-study-road-to-ipo/">surdeepsingh.com</a>
+      &middot; <a href="https://www.businessoutreach.in/astrotalk-business-model/">businessoutreach.in</a>
+      &middot; <a href="https://bizfin.substack.com/p/the-1b-astrology-app-india-cant-ignore">bizfin.substack.com</a>
+      <span class="src">— third-party estimates, not company filings.</span></li>
+    <li><strong>Co&ndash;Star</strong> — user scale and the role of social/compatibility sharing in
+      its growth; effect of social-sharing astrology tools on discovery.
+      <a href="https://www.statista.com/statistics/1451873/costar-registered-users">statista.com</a>
+      &middot; <a href="https://techcrunch.com/2020/03/02/top-10-u-s-astrology-apps-drew-in-40m-in-2019-up-65-from-2018">TechCrunch</a></li>
+    <li><strong>Dropbox referral programme</strong> — 3900% growth in 15 months, permanent +60%
+      signup volume, K-factor estimates.
+      <a href="https://referralrock.com/blog/dropbox-referral-program/">referralrock.com</a>
+      &middot; <a href="https://viral-loops.com/blog/dropbox-grew-3900-simple-referral-program/">viral-loops.com</a></li>
+    <li><strong>Duolingo retention and gamification</strong> — churn 47%→28%, ~3× growth in 7-day
+      streak share of DAU, Streak Freeze reducing at-risk churn 21%.
+      <a href="https://www.lennysnewsletter.com/p/how-duolingo-reignited-user-growth">Lenny's Newsletter (Jorge Mazal)</a>
+      &middot; <a href="https://www.strivecloud.io/blog/gamification-examples-boost-user-retention-duolingo">strivecloud.io</a></li>
+    <li><strong>Brynjolfsson, E., Li, D., &amp; Raymond, L.</strong> &ldquo;Generative AI at
+      Work.&rdquo; <em>The Quarterly Journal of Economics</em>, 140(2), 2025, pp. 889–942; NBER
+      Working Paper 31161. 5,179 support agents; +14% average and +34% novice throughput.
+      <a href="https://www.nber.org/papers/w31161">nber.org/papers/w31161</a>
+      &middot; <a href="https://academic.oup.com/qje/article/140/2/889/7990658">academic.oup.com</a>
+      <span class="pill rev">peer-reviewed</span></li>
+    <li><strong>Existing AI astrology products</strong> — AstroGPT, Om.AI, AstroSage AI layer,
+      establishing that conversational AI astrology is already commoditised.
+      <a href="https://play.google.com/store/apps/details?id=me.astrogpt.app">AstroGPT</a>
+      &middot; <a href="https://omai.app/">Om.AI</a>
+      &middot; <a href="https://www.astrosage.com/">AstroSage</a></li>
+    <li><strong>AstroLive product surfaces and pricing</strong> — chat ₹10/min, calls ₹15/min, first
+      consultation free, free tools, pooja booking, shop, personalised voice messages.
+      <a href="https://astrolive.app/">astrolive.app</a>
+      &middot; <a href="https://play.google.com/store/apps/details?id=app.astrolive">Google Play</a>
+      &middot; <a href="https://apps.apple.com/us/app/astrolive-talk-to-astrologer/id6484162351">App Store</a></li>
+    <li><strong>India astrology app market sizing</strong> — market size and growth projections
+      providing category context.
+      <a href="https://www.marknteladvisors.com/research-library/india-astrology-app-market.html">marknteladvisors.com</a></li>
+    <li><strong>Anthropic API documentation</strong> — model identifiers and SDK usage for the
+      prototype's live AI tier.
+      <a href="https://docs.anthropic.com/">docs.anthropic.com</a></li>
+  </ol>
+
+  <h3>16.2 &nbsp;AI tools used <span class="pill">mandatory disclosure</span></h3>
+  <div class="box">
+    <table style="margin:0">
+      <tr><th>Tool</th><th>Used for</th></tr>
+      <tr>
+        <td><strong>Claude Opus 5</strong><br /><span class="src">Anthropic, via Claude Code</span></td>
+        <td>Source research and synthesis of the competitive figures in §3; drafting and editing of
+          this report; writing the prototype's application code (React/TypeScript components, chart
+          and synastry engine, invite codec, growth model); authoring the pre-written AI copy shipped
+          in the prototype; generating the report's HTML/CSS layout.</td>
+      </tr>
+      <tr>
+        <td><strong>Claude Opus 5</strong><br /><span class="src">as the prototype's runtime model</span></td>
+        <td>The live AI tier inside the prototype itself — daily transit cards, synastry teasers,
+          memory search answers and async drafts — calls <code>claude-opus-5</code> through the
+          official Anthropic TypeScript SDK when a viewer supplies their own API key.</td>
+      </tr>
+    </table>
+  </div>
+  <p style="margin-top:8pt">
+    All strategic positioning, the choice of which problem to solve, the four-module architecture,
+    the AI-boundary principle, the decision to refuse an AI-oracle approach, and every judgement
+    about what to build and what to leave out are the team's own. AI was used as a research,
+    drafting and implementation tool throughout, and its outputs were reviewed and corrected — for
+    example, the retention model in §9.3 was rebuilt after an initial version produced an LTV:CAC
+    below 1 that contradicted the cited sources.
+  </p>
+
+  <h3>16.3 &nbsp;Third-party software</h3>
+  <p class="src">
+    React 19, Vite, TypeScript, Tailwind CSS, React Router, <code>@anthropic-ai/sdk</code> — all
+    under their respective open-source licences. Typefaces: Inter and Source Serif 4 (SIL Open Font
+    License) in this report; Inter and Fraunces in the prototype.
+  </p>
+
+  <div class="foot" style="margin-top:14pt">
+    <strong>AstroLive Sutra</strong> &middot; Team Mini Anon &middot; Tushar Bhardwaj &middot;
+    AstroHack 2026 &middot; Submitted 20 August 2026.<br />
+    Prototype: a publicly accessible static web application. Report: 18 pages.
+  </div>
+</section>
+
+</body>
+</html>

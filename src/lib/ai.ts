@@ -96,7 +96,7 @@ Person A — ${chartLine(a)}
 Person B — ${chartLine(b)}
 Relationship: ${relation}
 Computed compatibility: ${s.score}/100
-Strongest axis: ${s.aspects[0].label} (${s.aspects[0].score}/100)
+Strongest axis: ${[...s.aspects].sort((x, y) => y.score - x.score)[0].label} (${[...s.aspects].sort((x, y) => y.score - x.score)[0].score}/100)
 Weakest axis: ${[...s.aspects].sort((x, y) => x.score - y.score)[0].label}
 
 Write 3-4 sentences naming one genuine strength and one genuine friction, using both first names.
@@ -171,8 +171,9 @@ export function prewrittenTransit(c: Chart, body: string): string {
 }
 
 export function prewrittenSynastry(a: Chart, b: Chart, s: Synastry): string {
-  const best = s.aspects[0]
-  const worst = [...s.aspects].sort((x, y) => x.score - y.score)[0]
+  const ranked = [...s.aspects].sort((x, y) => y.score - x.score)
+  const best = ranked[0]
+  const worst = ranked[ranked.length - 1]
   const an = a.birth.name.split(' ')[0]
   const bn = b.birth.name.split(' ')[0]
   return `At ${s.score}/100, this reads as ${s.score >= 70 ? 'a genuinely workable pairing' : 'a pairing that will need deliberate effort'}. The strength sits in your ${best.label} — ${an}'s ${a.sun.element} temperament and ${bn}'s ${b.sun.element} one meet more easily here than most pairs manage. The friction is your ${worst.label}, and it will show up as the same argument recurring in different clothes. What this teaser cannot tell you is the house overlay, or when your next two decision windows open — that needs a named astrologer reading both charts side by side.`
