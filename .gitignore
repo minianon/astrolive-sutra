@@ -27,3 +27,5 @@ dist-ssr
 .chrome-prof/
 .chrome-prof2/
 .chrome-fresh/
+
+.claude/
